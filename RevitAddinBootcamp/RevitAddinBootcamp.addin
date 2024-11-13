@@ -8,6 +8,7 @@
     <VendorId>Revit Add-in Bootcamp</VendorId>
     <VendorDescription>Revit Add-in Bootcamp, https://academy.archsmarter.com</VendorDescription>
   </AddIn>
+	
   <AddIn Type="Command">
     <Text>RAB Skills Module 01</Text>
     <Description>RAB Skills Module 01</Description>
@@ -17,4 +18,15 @@
     <VendorId>Revit Add-in Bootcamp</VendorId>
     <VendorDescription>Revit Add-in Bootcamp, https://academy.archsmarter.com</VendorDescription>
   </AddIn>
+
+	<AddIn Type="Command">
+		<Text>Delete Backup Files</Text>
+		<Description>Deletes backup Revit files</Description>
+		<Assembly>RevitAddinBootcamp\RevitAddinBootcamp.dll</Assembly>
+		<FullClassName>RevitAddinBootcamp.cmdDeleteBackups</FullClassName>
+		<ClientId>A8548687-153B-4B79-A646-5618F30B9940</ClientId>
+		<VendorId>Revit Add-in Bootcamp</VendorId>
+		<VendorDescription>Revit Add-in Bootcamp, https://academy.archsmarter.com</VendorDescription>
+	</AddIn>
+	
 </RevitAddIns>
