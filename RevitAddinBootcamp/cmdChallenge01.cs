@@ -10,79 +10,103 @@
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Document doc = uidoc.Document;
 
-            // Your Module 01 Challenge code goes here
-            // Delete the TaskDialog below and add your code
-            //TaskDialog.Show("Module 01 Challenge", "Coming Soon!");
 
+            
 
-
-            Transaction t = new Transaction(doc);
-            t.Start("Challenge 01");
-
+            // 1.Set variables
             int numberVariable = 250;
             int startingElevation = 0;
             int floorHeight = 15;
 
+            // 2.Get titleblock
+            FilteredElementCollector tbCollector = new FilteredElementCollector(doc);
+            tbCollector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+            tbCollector.WhereElementIsElementType();
+            ElementId tblockID = tbCollector.FirstElementId();
 
-            // loop throuh a range of numbers
+            // 3.Get all view family types
+            FilteredElementCollector vftCollector = new FilteredElementCollector(doc);
+            vftCollector.OfClass(typeof(ViewFamilyType));
+
+            // 4.Get floor plan and ceiling plan view family types
+            ViewFamilyType floorPlanVFT = null;
+            ViewFamilyType ceilingPlanVFT = null;
+
+            foreach (ViewFamilyType curVFT in vftCollector)
+            {
+                if (curVFT.ViewFamily == ViewFamily.FloorPlan)
+                {
+                    floorPlanVFT = curVFT;
+                }
+                else if (curVFT.ViewFamily == ViewFamily.CeilingPlan)
+                {
+                    ceilingPlanVFT = curVFT;
+                }
+            }
+
+            // 4b.
+
+
+            // 5. Create transaction
+            Transaction t = new Transaction(doc);
+            t.Start("FIZZ BUZZ Challenge");
+
+            // 6. Create floors and check FIZZBUZZ
             for (int i = 1; i <= numberVariable; i++)
                 {
-                    
+                    //7. Create level
                     Level newLevel = Level.Create(doc, startingElevation);
-                //newLevel.Name = "Level";
-                startingElevation = startingElevation + floorHeight;
+                newLevel.Name = $"Level+{i}";
+                //startingElevation = startingElevation + floorHeight;
+               
+
+                //8. Check for FIZZ, BUZZ and FIZZBUZZ
 
                 int remainder1 = i % 3;
                 int remainder2 = i % 5;
 
                 if (remainder1 == 0 && remainder2 == 0)
                 {
-                    FilteredElementCollector collector1 = new FilteredElementCollector(doc);
-                    collector1.OfCategory(BuiltInCategory.OST_TitleBlocks);
-                    collector1.WhereElementIsElementType();
 
-                    ViewSheet newSheet = ViewSheet.Create(doc, collector1.FirstElementId());
-                    newSheet.Name = "FIZZBUZZ_#";
 
-                    // create a filtered element collector to get a view family type
-                    FilteredElementCollector collector2 = new FilteredElementCollector(doc);
-                    collector2.OfClass(typeof(ViewFamilyType));
+                    ViewSheet newSheet = ViewSheet.Create(doc, tblockID);
+                    newSheet.SheetNumber = i.ToString();
+                    newSheet.Name = $"FIZZBUZZ_#+{i}";
 
-                    ViewFamilyType floorPlanVFT = null;
-                    foreach (ViewFamilyType curVFT in collector2)
-                    {
-                        if (curVFT.ViewFamily == ViewFamily.FloorPlan)
-                        {
-                            floorPlanVFT = curVFT;
-                        }
-                    }
-
+          
                     // create a floorplan view
                     ViewPlan newFloorPlan = ViewPlan.Create(doc, floorPlanVFT.Id, newLevel.Id);
-                    newFloorPlan.Name = "My new fizzbuzz floor plan"+i;
+                    
 
                     // create a viewport
                     XYZ insPoint1 = new XYZ(1, 0.5, 0);
-
                     Viewport newViewport = Viewport.Create(doc, newSheet.Id, newFloorPlan.Id, insPoint1);
 
+                }
 
-                }
-                else if (remainder2 == 0)
-                {
-                    newLevel.Name = $"BUZZ_#"+i;
-                }
                 else if (remainder1 == 0)
                 {
-                    newLevel.Name = $"FIZZ_#"+i;
+                    ViewPlan newFloorPlan = ViewPlan.Create(doc, floorPlanVFT.Id, newLevel.Id);
                 }
 
-
+                else if (remainder2 == 0)
+                {
+                    ViewPlan newCeilingPlan = ViewPlan.Create(doc, ceilingPlanVFT.Id, newLevel.Id);
                 }
+
+                //9. increment elevation 
+                startingElevation += floorHeight;
+
+
+            }
 
 
             t.Commit();
             t.Dispose();
+
+            // 11. alert user
+            TaskDialog.Show("Complete", "Created " + numberVariable + " levels.");
+            //TaskDialog.Show("Complete", $"Created {numFloors} levels.");
 
             return Result.Succeeded;
         }
