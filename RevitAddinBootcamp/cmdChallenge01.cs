@@ -17,6 +17,9 @@
             int numberVariable = 250;
             int startingElevation = 0;
             int floorHeight = 15;
+            int fizzCount = 0;
+            int buzzCount = 0;
+            int fizzBuzzCount = 0;
 
             // 2.Get titleblock
             FilteredElementCollector tbCollector = new FilteredElementCollector(doc);
@@ -44,7 +47,17 @@
                 }
             }
 
-            // 4b.
+            // 4b. check for null values
+            if (floorPlanVFT == null)
+            {
+                TaskDialog.Show("Error", "There are no floor plan view family types in the model.");
+                return Result.Failed;
+            }
+            else if (ceilingPlanVFT == null)
+            {
+                TaskDialog.Show("Error", "There are no ceiling plan view family types in the model.");
+                return Result.Failed;
+            }
 
 
             // 5. Create transaction
@@ -82,16 +95,25 @@
                     XYZ insPoint1 = new XYZ(1, 0.5, 0);
                     Viewport newViewport = Viewport.Create(doc, newSheet.Id, newFloorPlan.Id, insPoint1);
 
+                    fizzBuzzCount ++;
+
                 }
 
                 else if (remainder1 == 0)
                 {
                     ViewPlan newFloorPlan = ViewPlan.Create(doc, floorPlanVFT.Id, newLevel.Id);
+                    newFloorPlan.Name = $"FIZZ_{i}";
+
+                    fizzCount ++;
+
                 }
 
                 else if (remainder2 == 0)
                 {
                     ViewPlan newCeilingPlan = ViewPlan.Create(doc, ceilingPlanVFT.Id, newLevel.Id);
+                    newCeilingPlan.Name = $"BUZZ_{i}";
+
+                    buzzCount ++;
                 }
 
                 //9. increment elevation 
@@ -105,7 +127,10 @@
             t.Dispose();
 
             // 11. alert user
-            TaskDialog.Show("Complete", "Created " + numberVariable + " levels.");
+            TaskDialog.Show("Complete", "Created " + numberVariable + " levels."+
+                $"Created {fizzCount} FIZZ views."+
+                $"Created {buzzCount} BUZZ views. " +
+                $"Created {fizzBuzzCount} FIZZBUZZ sheets.");
             //TaskDialog.Show("Complete", $"Created {numFloors} levels.");
 
             return Result.Succeeded;
