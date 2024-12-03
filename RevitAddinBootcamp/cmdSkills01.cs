@@ -43,9 +43,9 @@ namespace RevitAddinBootcamp
             double mmToFeet = mm / 304.8;
             double mmToFeet2 = (mm / 100) * 3.2084;
 
-            // find the remainder when dividing (ie. the modulo or mod)
-            double remainder1 = 100 % 10; // equals  0 (100 divided by 10 = 10)
-            double remainder2 = 100 % 9; // equals 1 (100 divided by 9 = 11 with remainder 1)
+            //// find the remainder when dividing (ie. the modulo or mod)
+            //// double remainder1 = 100 % 10; --- equals  0 (100 divided by 10 = 10)
+            //// double remainder2 = 100 % 9; --  equals 1 (100 divided by 9 = 11 with remainder 1)
 
             // increment a number by 1
             number6++;
