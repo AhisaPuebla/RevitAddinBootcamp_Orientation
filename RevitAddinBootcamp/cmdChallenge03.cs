@@ -53,7 +53,7 @@ namespace RevitAddinBootcamp
                             // check for null
                             if (curFS == null)
                             {
-                                TaskDialog.Show("Error", "Could not fing specified family :( Check your family data.");
+                                TaskDialog.Show("Error", "Could not find specified family :( Check your family data.");
                                 continue;
                             }
                             curFS.Activate(); // load family symbol so i can place it in the model if its not placed yet
